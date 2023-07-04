@@ -52,6 +52,7 @@ const generateAudio = async (input) => {
 
   const linesWithMeta = [];
 
+  let runningTotal = 0;
   for (const [idx, line] of lines.entries()) {
     console.debug(`Generating audio for ${line}`)
     const file = await generateLineWithSay(line, idx);
@@ -64,9 +65,16 @@ const generateAudio = async (input) => {
       mp3: file,
       duration,
     })
+
+    runningTotal += duration + config.DELAY_BETWEEN_AUDIO/1000;
   }
 
-  return linesWithMeta;
+  return {
+    linesWithMeta,
+    metadata: {
+      totalDuration: runningTotal,
+    }
+  };
 }
 
 module.exports = {
