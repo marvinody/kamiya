@@ -15,7 +15,7 @@ const makeComplexFilter = ({
   const L = audioData.length;
 
   const filters = [
-    `[0]crop=${[w, h, x, y].join(':')},subtitles=${subtitlePath}[vid]`,
+    `[0]crop=${[w, h, x, y].join(':')},subtitles=${subtitlePath}:force_style='Alignment=10,OutlineColour=&H100000000'[vid]`,
     `${audioData.map(s => `[${s.idx + 1}]`).join(`[${L + 1}]`)}concat=n=${L * 2 - 1}:v=0:a=1[voices]`,
     '[voices]speechnorm=p=0.3[finala]'
   ];
@@ -75,7 +75,9 @@ const generateVideo = async ({ videoData, audioData, subtitlePath, output, durat
   console.debug(`Starting video generation`)
   console.time('video-gen');
   try {
-    const {stderr, stdout} = await exec(ffmpegCmd);
+    const {stderr, stdout} = await exec(ffmpegCmd, {
+      timeout: 60*1000
+    });
   
   } catch (err) {
     console.timeEnd('video-gen');
