@@ -3,3 +3,5 @@ backgrounds/*
 staging/*
 inputs/*
 outputs/*
+
+.DS_Store

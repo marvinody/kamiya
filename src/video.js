@@ -36,7 +36,7 @@ const makeFfmpegVideoArgs = ({
   subtitlePath,
 }) => {
   const arguments = [
-    `-y`, // allow overwriting, cause it'll hang the client otherwise
+    // `-y`, // allow overwriting, cause it'll hang the client otherwise
     `-ss ${start}`,
     `-t ${duration}`,
     `-i ${input}`,
@@ -59,7 +59,18 @@ const determineStartPoint = ({ videoData, duration }) => {
   return start;
 }
 
-const generateVideo = async ({ videoData, audioData, subtitlePath, output, duration }) => {
+const suggestedName = (title) => {
+  const tags = [
+    'reddit',
+    'minecraftshorts',
+    'parkour'
+  ].map(s => '#'+s).join(' ');
+  const spaced = title.replace(/_/g, ' ');
+  
+  return `${spaced[0].toUpperCase()}${spaced.slice(1)} ${tags}`
+}
+
+const generateVideo = async ({ videoData, audioData, subtitlePath, output, duration, title }) => {
   const start = determineStartPoint({videoData, duration})
 
   const ffmpegArgs = makeFfmpegVideoArgs({
@@ -86,7 +97,8 @@ const generateVideo = async ({ videoData, audioData, subtitlePath, output, durat
   }
   console.timeEnd('video-gen');
 
-  console.debug(`Video generated at ${output}`)
+  console.info(`Video generated at ${output}`);
+  console.info(`Suggested name: "${suggestedName(title)}"`);
 }
 
 module.exports = {

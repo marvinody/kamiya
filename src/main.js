@@ -19,7 +19,7 @@ const path = require('path');
     console.info(`Parsing ${input.title}`);
     const output = path.join(outputs, `${input.title}.mp4`);
     
-    if(videoExistsAlready(output)) {
+    if(await videoExistsAlready(output)) {
       console.info(`${input.title} found to exist, skipping`)
       continue;
     }
@@ -42,6 +42,7 @@ const path = require('path');
       subtitlePath,
       videoData,
       duration: metadata.totalDuration,
+      title: input.title,
     });
 
   }
