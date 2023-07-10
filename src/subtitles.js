@@ -1,10 +1,11 @@
 const { stringifySync } = require('subtitle')
-const { DELAY_BETWEEN_AUDIO, staging } = require('./config')
+const { DELAY_BETWEEN_AUDIO, staging } = require('../config')
 const path = require('path');
 const fs = require('fs/promises');
+const logger = require('./util/logger');
 
 const generateSubtitles = async (audioData) => {
-  console.debug(`Generating subtitles`);
+  logger.debug(`Generating subtitles`);
   const { list } = audioData.reduce((acc, cur) => {
     const duration = cur.duration * 1000;
     const caption = {
@@ -31,7 +32,7 @@ const generateSubtitles = async (audioData) => {
   });
 
   const subfile = path.join(staging, 'captions.srt');
-  console.debug(`Writing subtitle file`);
+  logger.debug(`Writing subtitle file`);
   await fs.writeFile(subfile, srtString);
 
   return subfile;

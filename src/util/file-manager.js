@@ -1,5 +1,5 @@
 const fs = require('fs/promises');
-const { inputs } = require('./config');
+const { inputs } = require('../../config');
 const path = require('path')
 
 

@@ -1,6 +1,7 @@
-const { DELAY_BETWEEN_AUDIO, bgs, } = require("./config");
+const { DELAY_BETWEEN_AUDIO, bgs, } = require("../config");
 const path = require('path');
 const { promisify } = require('util');
+const logger = require("./util/logger");
 const exec = promisify(require('child_process').exec);
 
 const makeComplexFilter = ({
@@ -66,7 +67,7 @@ const suggestedName = (title) => {
     'parkour'
   ].map(s => '#'+s).join(' ');
   const spaced = title.replace(/_/g, ' ');
-  
+
   return `${spaced[0].toUpperCase()}${spaced.slice(1)} ${tags}`
 }
 
@@ -83,7 +84,7 @@ const generateVideo = async ({ videoData, audioData, subtitlePath, output, durat
   })
 
   const ffmpegCmd = ['ffmpeg', ...ffmpegArgs].join(' \\\n  ');
-  console.debug(`Starting video generation`)
+  logger.info(`Starting video generation`);
   console.time('video-gen');
   try {
     const {stderr, stdout} = await exec(ffmpegCmd, {
@@ -92,13 +93,13 @@ const generateVideo = async ({ videoData, audioData, subtitlePath, output, durat
   
   } catch (err) {
     console.timeEnd('video-gen');
-    console.error(err);
+    logger.error(err);
     throw err;
   }
   console.timeEnd('video-gen');
 
-  console.info(`Video generated at ${output}`);
-  console.info(`Suggested name: "${suggestedName(title)}"`);
+  logger.info(`Video generated at ${output}`);
+  logger.info(`Suggested name: "${suggestedName(title)}"`);
 }
 
 module.exports = {

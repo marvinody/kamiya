@@ -3,5 +3,7 @@ backgrounds/*
 staging/*
 inputs/*
 outputs/*
-
+saved/*
+.env
+.envrc
 .DS_Store
